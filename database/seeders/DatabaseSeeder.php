@@ -29,17 +29,17 @@ class DatabaseSeeder extends Seeder
         $userRole->syncPermissions($upvoteDownvotePermission);
         $commenterRole->syncPermissions([$manageCommentsPermission, $upvoteDownvotePermission]);
         $adminRole->syncPermissions(Permission::all());
-        
+
         User::factory()->create([
             'name' => 'User User',
-            'email' => 'User@example.com',
+            'email' => 'user@example.com',
         ])->assignRole(RolesEnum::User);
-        
+
         User::factory()->create([
             'name' => 'Commenter User',
             'email' => 'commenter@example.com',
         ])->assignRole(RolesEnum::Commenter);
-        
+
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
