@@ -1,6 +1,8 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
+import { Plus } from 'lucide-react';
 import FeatureItem from '@/components/feature-item';
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import features from '@/routes/features';
 import type { BreadcrumbItem, PaginatedResponse } from '@/types';
@@ -13,19 +15,33 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Index({ features }: { features: PaginatedResponse<Feature> }) {
+export default function Index({
+    features: featuresData,
+}: {
+    features: PaginatedResponse<Feature>;
+}) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Features" />
 
-            <div className="flex flex-col gap-4 p-4 max-w-4xl mx-auto">
-                {features.data.map((feature) => (
+            <div className="mx-auto flex w-full max-w-4xl flex-col gap-4 p-4">
+                <div className="mb-4 flex items-center justify-between">
+                    <h2 className="text-2xl font-bold">Features</h2>
+                    <Button asChild className="rounded-full">
+                        <Link href={features.create().url}>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Create Feature
+                        </Link>
+                    </Button>
+                </div>
+
+                {featuresData.data.map((feature) => (
                     <FeatureItem key={feature.id} feature={feature} />
                 ))}
 
-                {features.data.length === 0 && (
-                    <div className="text-center py-12 text-muted-foreground">
-                        No features found.
+                {featuresData.data.length === 0 && (
+                    <div className="rounded-lg border border-dashed bg-card py-12 text-center text-muted-foreground">
+                        No features found. Be the first to create one!
                     </div>
                 )}
             </div>

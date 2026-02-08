@@ -16,7 +16,7 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('features', [FeatureController::class, 'index'])->name('features.index');
+    Route::resource('features', FeatureController::class);
 });
 
 require __DIR__.'/settings.php';

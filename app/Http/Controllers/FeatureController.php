@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FeatureRequest;
 use App\Http\Resources\FeatureResource;
 use App\Models\Feature;
 use Illuminate\Http\Request;
@@ -28,15 +29,19 @@ class FeatureController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('features/create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(FeatureRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['user_id'] = auth()->id();
+
+        Feature::create($data);
+        return to_route('features.index')->with('success', 'Feature created successfully.');
     }
 
     /**
@@ -44,7 +49,10 @@ class FeatureController extends Controller
      */
     public function show(Feature $feature)
     {
-        //
+        $feature->load('user', 'comments.user', 'upvotes');
+        return Inertia::render('features/show', [
+            'feature' => new FeatureResource($feature),
+        ]);
     }
 
     /**
@@ -52,15 +60,20 @@ class FeatureController extends Controller
      */
     public function edit(Feature $feature)
     {
-        //
+        return Inertia::render('features/edit', [
+            'feature' => new FeatureResource($feature),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Feature $feature)
+    public function update(FeatureRequest $request, Feature $feature)
     {
-        //
+        $data = $request->validated();
+        $feature->update($data);
+
+        return to_route('features.index')->with('success', 'Feature updated successfully.');
     }
 
     /**
@@ -68,6 +81,8 @@ class FeatureController extends Controller
      */
     public function destroy(Feature $feature)
     {
-        //
+        $feature->delete();
+
+        return to_route('features.index')->with('success', 'Feature deleted successfully.');
     }
 }
