@@ -38,9 +38,11 @@ export default function Create() {
         description: '',
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
-        post(features.store().url);
+        post(features.store().url, {
+            preserveScroll: true,
+        });
     };
 
     const tabs = [

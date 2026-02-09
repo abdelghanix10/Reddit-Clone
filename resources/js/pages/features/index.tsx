@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, InfiniteScroll, Link } from '@inertiajs/react';
 
 import { Plus } from 'lucide-react';
 import FeatureItem from '@/components/feature-item';
@@ -35,9 +35,39 @@ export default function Index({
                     </Button>
                 </div>
 
-                {featuresData.data.map((feature) => (
-                    <FeatureItem key={feature.id} feature={feature} />
-                ))}
+                <InfiniteScroll
+                    data="features"
+                    manualAfter={3}
+                    buffer={300}
+                    previous={({ loading, fetch, hasMore }) =>
+                        hasMore && (
+                            <Button
+                                variant="ghost"
+                                className="w-full border"
+                                onClick={fetch}
+                                disabled={loading}
+                            >
+                                {loading ? 'Loading...' : 'Load previous'}
+                            </Button>
+                        )
+                    }
+                    next={({ loading, fetch, hasMore }) =>
+                        hasMore && (
+                            <Button
+                                variant="ghost"
+                                className="w-full border"
+                                onClick={fetch}
+                                disabled={loading}
+                            >
+                                {loading ? 'Loading...' : 'Load more'}
+                            </Button>
+                        )
+                    }
+                >
+                    {featuresData.data.map((feature) => (
+                        <FeatureItem key={feature.id} feature={feature} />
+                    ))}
+                </InfiniteScroll>
 
                 {featuresData.data.length === 0 && (
                     <div className="rounded-lg border border-dashed bg-card py-12 text-center text-muted-foreground">
