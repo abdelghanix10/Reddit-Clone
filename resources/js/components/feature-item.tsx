@@ -35,7 +35,7 @@ export default function FeatureItem({ feature }: FeatureItemProps) {
                     size="icon"
                     className="h-8 w-8 hover:cursor-pointer hover:bg-transparent hover:text-orange-600"
                 >
-                    <ArrowBigUp className="h-6 w-6" />
+                        <ArrowBigUp className={`h-6 w-6 ${feature.user_has_upvoted ? 'text-orange-600' : ''}`} />
                 </Button>
                 <span className="text-xs font-bold">
                     {feature.upvotes_count}
@@ -45,7 +45,7 @@ export default function FeatureItem({ feature }: FeatureItemProps) {
                     size="icon"
                     className="h-8 w-8 hover:cursor-pointer hover:bg-transparent hover:text-blue-600"
                 >
-                    <ArrowBigDown className="h-6 w-6" />
+                        <ArrowBigDown className={`h-6 w-6 ${feature.user_has_downvoted ? 'text-blue-600' : ''}`} />
                 </Button>
             </div>
 

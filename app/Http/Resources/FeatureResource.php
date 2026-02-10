@@ -22,6 +22,8 @@ class FeatureResource extends JsonResource
             'user' => new UserResource($this->whenLoaded('user')),
             'upvotes_count' => $this->upvotes_count ?? 0,
             'comments_count' => $this->comments_count ?? 0,
+            'user_has_upvoted' => $this->user_has_upvoted ?? false,
+            'user_has_downvoted' => $this->user_has_downvoted ?? false,
             'created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at->diffForHumans(),
         ];

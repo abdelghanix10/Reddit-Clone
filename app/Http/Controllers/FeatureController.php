@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\FeatureRequest;
 use App\Http\Resources\FeatureResource;
 use App\Models\Feature;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class FeatureController extends Controller
@@ -16,12 +16,20 @@ class FeatureController extends Controller
      */
     public function index()
     {
+        $currentUserId = Auth::id();
         $paginatedFeatures = Feature::query()
-            ->with('user')
-            ->withCount(['comments', 'upvotes'])
-            ->latest()
-            ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->withCount(['upvotes as upvotes_count' => function ($query) {
+                $query->select(DB::raw('SUM(CASE WHEN upvote THEN 1 ELSE -1 END)'));
+            }])
+            ->withExists([
+                'upvotes as user_has_upvoted' => function ($query) use ($currentUserId) {
+                    $query->where('user_id', $currentUserId)->where('upvote', true);
+                },
+                'upvotes as user_has_downvoted' => function ($query) use ($currentUserId) {
+                    $query->where('user_id', $currentUserId)->where('upvote', false);
+                },
+            ])
+            ->paginate();
         return Inertia::render('features/index', [
             'features' => Inertia::scroll(FeatureResource::collection($paginatedFeatures)),
         ]);
