@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use App\Models\Upvote;
+use App\Models\Feature;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\FeatureRequest;
 use App\Http\Resources\FeatureResource;
-use App\Models\Feature;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Inertia\Inertia;
 
 class FeatureController extends Controller
 {
@@ -60,7 +61,20 @@ class FeatureController extends Controller
      */
     public function show(Feature $feature)
     {
-        $feature->load('user', 'comments.user', 'upvotes');
+        $feature->upvotes_count = Upvote::where('feature_id', $feature->id)
+            ->sum(DB::raw('CASE WHEN upvote THEN 1 ELSE -1 END'));
+
+         $currentUserId = Auth::id();
+         $feature->user_has_upvoted = Upvote::where('feature_id', $feature->id)
+             ->where('user_id', $currentUserId)
+             ->where('upvote', true)
+             ->exists();
+
+         $feature->user_has_downvoted = Upvote::where('feature_id', $feature->id)
+             ->where('user_id', $currentUserId)
+             ->where('upvote', false)
+             ->exists();
+             
         return Inertia::render('features/show', [
             'feature' => new FeatureResource($feature),
         ]);

@@ -1,7 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
-    ArrowBigDown,
-    ArrowBigUp,
     MessageSquare,
     Share2,
     Edit,
@@ -14,6 +12,7 @@ import {
     CardFooter,
     CardHeader,
 } from '@/components/ui/card';
+import UpvoteDownvoteItem from '@/components/upvote-downvote-item';
 import features from '@/routes/features';
 import type { SharedData } from '@/types';
 import type { Feature } from '@/types/feature';
@@ -29,26 +28,9 @@ export default function FeatureItem({ feature }: FeatureItemProps) {
     return (
         <Card className="flex flex-row overflow-hidden bg-card transition-colors hover:border-gray-400 dark:hover:border-gray-600">
             {/* Voting Section */}
-            <div className="flex w-12 flex-col items-center gap-1 bg-muted/30 p-2">
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 hover:cursor-pointer hover:bg-transparent hover:text-orange-600"
-                >
-                        <ArrowBigUp className={`h-6 w-6 ${feature.user_has_upvoted ? 'text-orange-600' : ''}`} />
-                </Button>
-                <span className="text-xs font-bold">
-                    {feature.upvotes_count}
-                </span>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 hover:cursor-pointer hover:bg-transparent hover:text-blue-600"
-                >
-                        <ArrowBigDown className={`h-6 w-6 ${feature.user_has_downvoted ? 'text-blue-600' : ''}`} />
-                </Button>
-            </div>
+            <UpvoteDownvoteItem feature={feature} />
 
+            {/* Content Section */}
             <div className="flex flex-1 flex-col">
                 <CardHeader className="space-y-0 p-4 pb-2">
                     <div className="flex items-center justify-between">

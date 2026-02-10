@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UpvoteController;
 use \App\Http\Controllers\FeatureController;
 
 Route::get('/', function () {
@@ -17,6 +18,9 @@ Route::get('dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('features', FeatureController::class);
+
+    Route::post('features/{feature}/upvote', [UpvoteController::class, 'store'])->name('features.upvote');
+    Route::delete('features/{feature}/upvote', [UpvoteController::class, 'destroy'])->name('features.upvote.destroy');
 });
 
 require __DIR__.'/settings.php';
