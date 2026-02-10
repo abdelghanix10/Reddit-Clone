@@ -18,11 +18,11 @@ import type { Feature } from '@/types/feature';
 
 type Tab = 'text' | 'media' | 'link' | 'poll';
 
-export default function Edit({ feature }: { feature: { data: Feature } }) {
+export default function Edit({ feature }: { feature: Feature }) {
     const [activeTab, setActiveTab] = useState<Tab>('text');
     const { data, setData, put, processing, errors } = useForm({
-        name: feature.data.name || '',
-        description: feature.data.description || '',
+        name: feature.name || '',
+        description: feature.description || '',
     });
 
     const breadcrumbs: BreadcrumbItem[] = [
@@ -32,13 +32,13 @@ export default function Edit({ feature }: { feature: { data: Feature } }) {
         },
         {
             title: 'Edit',
-            href: features.edit(feature.data.id).url,
+            href: features.edit(feature.id).url,
         },
     ];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(features.update(feature.data.id).url);
+        put(features.update(feature.id).url);
     };
 
     const tabs = [
@@ -67,7 +67,7 @@ export default function Edit({ feature }: { feature: { data: Feature } }) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Edit ${feature.data.name}`} />
+            <Head title={`Edit ${feature.name}`} />
 
             <div className="mx-auto max-w-185 p-4 md:p-6">
                 <div className="mb-4 flex items-center justify-between border-b border-muted pb-4">

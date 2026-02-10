@@ -1,7 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
     MessageSquare,
-    Share2,
     Edit,
     Trash2,
 } from 'lucide-react';
@@ -91,22 +90,17 @@ export default function FeatureItem({ feature }: FeatureItemProps) {
                 </CardContent>
                 <CardFooter className="flex gap-2 p-2 px-4 pt-0">
                     <Button
+                        asChild
                         variant="ghost"
                         size="sm"
                         className="h-auto gap-2 p-2 text-muted-foreground hover:bg-muted/50"
                     >
-                        <MessageSquare className="h-4 w-4" />
-                        <span className="text-xs font-bold">
-                            {feature.comments_count} Comments
-                        </span>
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-auto gap-2 p-2 text-muted-foreground hover:bg-muted/50"
-                    >
-                        <Share2 className="h-4 w-4" />
-                        <span className="text-xs font-bold">Share</span>
+                        <Link href={features.show(feature.id).url}>
+                            <MessageSquare className="h-4 w-4" />
+                            <span className="text-xs font-bold">
+                                {feature.comments_count} Comments
+                            </span>
+                        </Link>
                     </Button>
                 </CardFooter>
             </div>

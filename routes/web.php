@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UpvoteController;
 use \App\Http\Controllers\FeatureController;
 
@@ -21,6 +22,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('features/{feature}/upvote', [UpvoteController::class, 'store'])->name('features.upvote');
     Route::delete('features/{feature}/upvote', [UpvoteController::class, 'destroy'])->name('features.upvote.destroy');
+    Route::post('features/{feature}/comments', [CommentController::class, 'store'])->name('features.comments.store');
+    Route::delete('features/{feature}/comments/{comment}', [CommentController::class, 'destroy'])->name('features.comments.destroy');
 });
 
 require __DIR__.'/settings.php';

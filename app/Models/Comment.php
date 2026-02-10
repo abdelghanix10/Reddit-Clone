@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Comment extends Model
 {
+    protected $fillable = ['content', 'user_id', 'feature_id'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\FeatureRequest;
 use App\Http\Resources\FeatureResource;
+use App\Http\Resources\HomeFeatureResource;
 
 class FeatureController extends Controller
 {
@@ -19,6 +20,9 @@ class FeatureController extends Controller
     {
         $currentUserId = Auth::id();
         $paginatedFeatures = Feature::query()
+            ->latest()
+            ->with('user')
+            ->withCount('comments as comments_count')
             ->withCount(['upvotes as upvotes_count' => function ($query) {
                 $query->select(DB::raw('SUM(CASE WHEN upvote THEN 1 ELSE -1 END)'));
             }])
@@ -32,7 +36,7 @@ class FeatureController extends Controller
             ])
             ->paginate();
         return Inertia::render('features/index', [
-            'features' => Inertia::scroll(FeatureResource::collection($paginatedFeatures)),
+            'features' => Inertia::scroll(HomeFeatureResource::collection($paginatedFeatures)),
         ]);
     }
 
@@ -64,17 +68,21 @@ class FeatureController extends Controller
         $feature->upvotes_count = Upvote::where('feature_id', $feature->id)
             ->sum(DB::raw('CASE WHEN upvote THEN 1 ELSE -1 END'));
 
-         $currentUserId = Auth::id();
-         $feature->user_has_upvoted = Upvote::where('feature_id', $feature->id)
-             ->where('user_id', $currentUserId)
-             ->where('upvote', true)
-             ->exists();
+        $currentUserId = Auth::id();
+        $feature->user_has_upvoted = Upvote::where('feature_id', $feature->id)
+            ->where('user_id', $currentUserId)
+            ->where('upvote', true)
+            ->exists();
 
-         $feature->user_has_downvoted = Upvote::where('feature_id', $feature->id)
-             ->where('user_id', $currentUserId)
-             ->where('upvote', false)
-             ->exists();
-             
+        $feature->user_has_downvoted = Upvote::where('feature_id', $feature->id)
+            ->where('user_id', $currentUserId)
+            ->where('upvote', false)
+            ->exists();
+
+        $feature->with('comments.user');
+
+        $feature->comments_count = $feature->comments()->count();
+
         return Inertia::render('features/show', [
             'feature' => new FeatureResource($feature),
         ]);
