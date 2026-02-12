@@ -3,7 +3,12 @@ import { Edit, Trash2 } from 'lucide-react';
 
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+} from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 
 import UpvoteDownvoteItem from '@/components/upvote-downvote-item';
@@ -118,7 +123,7 @@ export default function Show({ feature }: FeatureShowProps) {
                             </h1>
                         </CardHeader>
                         <CardContent className="px-4 py-2">
-                            <p className="whitespace-pre-line text-sm text-muted-foreground">
+                            <p className="text-sm whitespace-pre-line text-muted-foreground">
                                 {feature.description}
                             </p>
                         </CardContent>
@@ -203,7 +208,16 @@ export default function Show({ feature }: FeatureShowProps) {
                                                     className="h-7 w-7 text-muted-foreground hover:text-destructive"
                                                 >
                                                     <Link
-                                                        href={`/features/${feature.id}/comments/${comment.id}`}
+                                                        href={
+                                                            features.comments.destroy(
+                                                                {
+                                                                    feature:
+                                                                        feature.id,
+                                                                    comment:
+                                                                        comment.id,
+                                                                },
+                                                            ).url
+                                                        }
                                                         method="delete"
                                                         as="button"
                                                         preserveScroll
@@ -214,7 +228,7 @@ export default function Show({ feature }: FeatureShowProps) {
                                             )}
                                         </div>
                                     </CardHeader>
-                                    <CardContent className="px-3 pb-3 pt-0 text-sm text-foreground">
+                                    <CardContent className="px-3 pt-0 pb-3 text-sm text-foreground">
                                         {comment.content}
                                     </CardContent>
                                 </Card>

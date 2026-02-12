@@ -79,7 +79,8 @@ class FeatureController extends Controller
             ->where('upvote', false)
             ->exists();
 
-        $feature->with('comments.user');
+        $feature->load('comments.user');
+        
 
         $feature->comments_count = $feature->comments()->count();
 
