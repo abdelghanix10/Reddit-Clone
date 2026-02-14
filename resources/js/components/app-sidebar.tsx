@@ -1,6 +1,18 @@
-import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Star } from 'lucide-react';
-import { NavFooter } from '@/components/nav-footer';
+import { Link, usePage } from '@inertiajs/react';
+import {
+    BookOpen,
+    Briefcase,
+    CircleHelp,
+    Code,
+    Compass,
+    Info,
+    Megaphone,
+    Mic2,
+    Newspaper,
+    Star,
+    TrendingUp,
+    Users,
+} from 'lucide-react';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -12,45 +24,90 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
 import posts from '@/routes/posts';
-import type { NavItem } from '@/types';
+import type { NavItem, SharedData } from '@/types';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
-        href: dashboard().url,
-        icon: LayoutGrid,
+        title: 'Popular',
+        href: posts.index().url,
+        icon: TrendingUp,
     },
     {
-        title: 'Posts',
-        href: posts.index().url,
-        icon: Star,
+        title: 'News',
+        href: '#',
+        icon: Newspaper,
+    },
+    {
+        title: 'Explore',
+        href: '#',
+        icon: Compass,
     },
 ];
 
-const footerNavItems: NavItem[] = [
+const resourceNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
+        title: 'About ForumX',
+        href: '#',
+        icon: Info,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
+        title: 'Advertise',
+        href: '#',
+        icon: Megaphone,
+    },
+    {
+        title: 'Developer Platform',
+        href: '#',
+        icon: Code,
+    },
+    {
+        title: 'ForumX Pro',
+        href: '#',
+        icon: Star,
+        badge: 'BETA',
+    },
+    {
+        title: 'Help',
+        href: '#',
+        icon: CircleHelp,
+    },
+    {
+        title: 'Blog',
+        href: '#',
         icon: BookOpen,
+    },
+    {
+        title: 'Careers',
+        href: '#',
+        icon: Briefcase,
+    },
+    {
+        title: 'Press',
+        href: '#',
+        icon: Mic2,
+    },
+];
+
+const communityNavItems: NavItem[] = [
+    {
+        title: 'Communities',
+        href: '#',
+        icon: Users,
     },
 ];
 
 export function AppSidebar() {
+    const { auth } = usePage<SharedData>().props;
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href="/">
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -59,13 +116,12 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={mainNavItems} title="FEEDS" />
+                <NavMain items={resourceNavItems} title="RESOURCES" />
+                <NavMain items={communityNavItems} title="COMMUNITIES" />
             </SidebarContent>
 
-            <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
-                <NavUser />
-            </SidebarFooter>
+            <SidebarFooter>{auth.user && <NavUser />}</SidebarFooter>
         </Sidebar>
     );
 }

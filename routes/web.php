@@ -15,15 +15,17 @@ Route::get('/', function () {
 
 Route::get('dashboard', function () {
     return Inertia::render('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('posts', PostController::class);
+
+
+Route::resource('posts', PostController::class);
 
     Route::post('posts/{post}/upvote', [UpvoteController::class, 'store'])->name('posts.upvote');
     Route::delete('posts/{post}/upvote', [UpvoteController::class, 'destroy'])->name('posts.upvote.destroy');
     Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
     Route::delete('posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])->name('posts.comments.destroy');
-});
+
+
 
 require __DIR__.'/settings.php';
