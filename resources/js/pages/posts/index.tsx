@@ -1,12 +1,12 @@
 import { Head, InfiniteScroll, Link } from '@inertiajs/react';
 
 import { Plus } from 'lucide-react';
-import PostItem from '@/components/post-item';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import posts from '@/routes/posts';
 import type { BreadcrumbItem, PaginatedResponse } from '@/types';
 import type { Post } from '@/types/post';
+import PostItem from '@/components/post-item';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

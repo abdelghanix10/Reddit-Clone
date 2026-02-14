@@ -65,7 +65,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $post->upvotes_count = Upvote::where('fpost_id', $post->id)
+        $post->upvotes_count = Upvote::where('post_id', $post->id)
             ->sum(DB::raw('CASE WHEN upvote THEN 1 ELSE -1 END'));
 
         $currentUserId = Auth::id();

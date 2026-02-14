@@ -27,13 +27,20 @@ export default function Show({ post }: PostShowProps) {
     const comments = post.comments ?? [];
     const commentCount = post.comments_count ?? post.comments?.length ?? 0;
 
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const {
+        data,
+        setData,
+        post: submitComment,
+        processing,
+        errors,
+        reset,
+    } = useForm({
         content: '',
     });
 
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault();
-        post(posts.comments.store(post.id).url, {
+        submitComment(posts.comments.store(post.id).url, {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => reset('content'),
@@ -46,7 +53,7 @@ export default function Show({ post }: PostShowProps) {
             href: posts.index().url,
         },
         {
-            title: post.title,
+            title: post.name,
             href: posts.show(post.id).url,
         },
     ];
