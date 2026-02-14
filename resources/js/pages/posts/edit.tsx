@@ -12,33 +12,33 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import features from '@/routes/features';
+import posts from '@/routes/posts';
 import type { BreadcrumbItem } from '@/types';
-import type { Feature } from '@/types/feature';
+import type { Post } from '@/types/post';
 
 type Tab = 'text' | 'media' | 'link' | 'poll';
 
-export default function Edit({ feature }: { feature: Feature }) {
+export default function Edit({ post }: { post: Post }) {
     const [activeTab, setActiveTab] = useState<Tab>('text');
     const { data, setData, put, processing, errors } = useForm({
-        name: feature.name || '',
-        description: feature.description || '',
+        name: post.name || '',
+        description: post.description || '',
     });
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'Features',
-            href: features.index().url,
+            title: 'Posts',
+            href: posts.index().url,
         },
         {
             title: 'Edit',
-            href: features.edit(feature.id).url,
+            href: posts.edit(post.id).url,
         },
     ];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        put(features.update(feature.id).url);
+        put(posts.update(post.id).url);
     };
 
     const tabs = [
@@ -67,7 +67,7 @@ export default function Edit({ feature }: { feature: Feature }) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Edit ${feature.name}`} />
+            <Head title={`Edit ${post.name}`} />
 
             <div className="mx-auto max-w-185 p-4 md:p-6">
                 <div className="mb-4 flex items-center justify-between border-b border-muted pb-4">

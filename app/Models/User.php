@@ -52,8 +52,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function features(): HasMany
+    public function posts(): HasMany
     {
-        return $this->hasMany(Feature::class);
+        return $this->hasMany(Post::class);
     }
 }

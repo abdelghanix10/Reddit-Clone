@@ -1,7 +1,7 @@
 import type { User } from '@/types/auth';
 import type { Comment } from '@/types/comment';
 
-export type Feature = {
+export type Post = {
     id: number;
     name: string;
     description: string;

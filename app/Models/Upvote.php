@@ -11,12 +11,12 @@ class Upvote extends Model
     
     protected $fillable = [
         'user_id',
-        'feature_id',
+        'post_id',
         'upvote',
     ];
     
-    public function feature(): BelongsTo
+    public function post(): BelongsTo
     {
-        return $this->belongsTo(Feature::class);
+        return $this->belongsTo(Post::class);
     }
 }

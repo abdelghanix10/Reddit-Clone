@@ -1,16 +1,14 @@
 import { useForm } from '@inertiajs/react';
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import features from '@/routes/features';
-import type { Feature } from '@/types/feature';
+import posts from '@/routes/posts';
+import type { Post } from '@/types/post';
 
 interface UpvoteDownvoteItemProps {
-    feature: Feature;
+    post: Post;
 }
 
-export default function UpvoteDownvoteItem({
-    feature,
-}: UpvoteDownvoteItemProps) {
+export default function UpvoteDownvoteItem({ post }: UpvoteDownvoteItemProps) {
     const upvoteForm = useForm({
         upvote: true,
     });
@@ -20,14 +18,14 @@ export default function UpvoteDownvoteItem({
     const upvoteDownvote = (upvote: boolean) => {
         const form = upvote ? upvoteForm : downvoteForm;
         if (
-            (feature.user_has_upvoted && upvote) ||
-            (feature.user_has_downvoted && !upvote)
+            (post.user_has_upvoted && upvote) ||
+            (post.user_has_downvoted && !upvote)
         ) {
-            form.delete(features.upvote(feature.id).url, {
+            form.delete(posts.upvote(post.id).url, {
                 preserveScroll: true,
             });
         } else {
-            form.post(features.upvote(feature.id).url, {
+            form.post(posts.upvote(post.id).url, {
                 preserveScroll: true,
             });
         }
@@ -42,10 +40,10 @@ export default function UpvoteDownvoteItem({
                 className="h-8 w-8 hover:cursor-pointer hover:bg-transparent hover:text-orange-600"
             >
                 <ArrowBigUp
-                    className={`h-6 w-6 ${feature.user_has_upvoted ? 'text-orange-600' : ''}`}
+                    className={`h-6 w-6 ${post.user_has_upvoted ? 'text-orange-600' : ''}`}
                 />
             </Button>
-            <span className="text-xs font-bold">{feature.upvotes_count}</span>
+            <span className="text-xs font-bold">{post.upvotes_count}</span>
             <Button
                 variant="ghost"
                 size="icon"
@@ -53,7 +51,7 @@ export default function UpvoteDownvoteItem({
                 className="h-8 w-8 hover:cursor-pointer hover:bg-transparent hover:text-blue-600"
             >
                 <ArrowBigDown
-                    className={`h-6 w-6 ${feature.user_has_downvoted ? 'text-blue-600' : ''}`}
+                    className={`h-6 w-6 ${post.user_has_downvoted ? 'text-blue-600' : ''}`}
                 />
             </Button>
         </div>

@@ -15,17 +15,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import features from '@/routes/features';
+import posts from '@/routes/posts';
 import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Features',
-        href: features.index().url,
+        title: 'Posts',
+        href: posts.index().url,
     },
     {
         title: 'Create',
-        href: features.create().url,
+        href: posts.create().url,
     },
 ];
 
@@ -40,7 +40,7 @@ export default function Create() {
 
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
-        post(features.store().url, {
+        post(posts.store().url, {
             preserveScroll: true,
         });
     };
@@ -71,7 +71,7 @@ export default function Create() {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create Feature" />
+            <Head title="Create Post" />
 
             <div className="mx-auto max-w-185 p-4 md:p-6">
                 <div className="mb-4 flex items-center justify-between border-b border-muted pb-4">

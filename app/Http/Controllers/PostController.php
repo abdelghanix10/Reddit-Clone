@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Upvote;
-use App\Models\Feature;
+use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\FeatureRequest;
-use App\Http\Resources\FeatureResource;
-use App\Http\Resources\HomeFeatureResource;
+use App\Http\Requests\PostRequest;
+use App\Http\Resources\PostResource;
+use App\Http\Resources\HomePostResource;
 
-class FeatureController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +19,7 @@ class FeatureController extends Controller
     public function index()
     {
         $currentUserId = Auth::id();
-        $paginatedFeatures = Feature::query()
+        $paginatedPosts = Post::query()
             ->latest()
             ->with('user')
             ->withCount('comments as comments_count')
@@ -35,8 +35,8 @@ class FeatureController extends Controller
                 },
             ])
             ->paginate();
-        return Inertia::render('features/index', [
-            'features' => Inertia::scroll(HomeFeatureResource::collection($paginatedFeatures)),
+        return Inertia::render('posts/index', [
+            'posts' => Inertia::scroll(HomePostResource::collection($paginatedPosts)),
         ]);
     }
 
@@ -45,78 +45,78 @@ class FeatureController extends Controller
      */
     public function create()
     {
-        return Inertia::render('features/create');
+        return Inertia::render('posts/create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(FeatureRequest $request)
+    public function store(PostRequest $request)
     {
         $data = $request->validated();
         $data['user_id'] = Auth::id();
 
-        Feature::create($data);
-        return to_route('features.index')->with('success', 'Feature created successfully.');
+        Post::create($data);
+        return to_route('posts.index')->with('success', 'Post created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Feature $feature)
+    public function show(Post $post)
     {
-        $feature->upvotes_count = Upvote::where('feature_id', $feature->id)
+        $post->upvotes_count = Upvote::where('fpost_id', $post->id)
             ->sum(DB::raw('CASE WHEN upvote THEN 1 ELSE -1 END'));
 
         $currentUserId = Auth::id();
-        $feature->user_has_upvoted = Upvote::where('feature_id', $feature->id)
+        $post->user_has_upvoted = Upvote::where('post_id', $post->id)
             ->where('user_id', $currentUserId)
             ->where('upvote', true)
             ->exists();
 
-        $feature->user_has_downvoted = Upvote::where('feature_id', $feature->id)
+        $post->user_has_downvoted = Upvote::where('post_id', $post->id)
             ->where('user_id', $currentUserId)
             ->where('upvote', false)
             ->exists();
 
-        $feature->load('comments.user');
+        $post->load('comments.user');
         
 
-        $feature->comments_count = $feature->comments()->count();
+        $post->comments_count = $post->comments()->count();
 
-        return Inertia::render('features/show', [
-            'feature' => new FeatureResource($feature),
+        return Inertia::render('posts/show', [
+            'post' => new PostResource($post),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Feature $feature)
+    public function edit(Post $post)
     {
-        return Inertia::render('features/edit', [
-            'feature' => new FeatureResource($feature),
+        return Inertia::render('posts/edit', [
+            'post' => new PostResource($post),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(FeatureRequest $request, Feature $feature)
+    public function update(PostRequest $request, Post $post)
     {
         $data = $request->validated();
-        $feature->update($data);
+        $post->update($data);
 
-        return to_route('features.index')->with('success', 'Feature updated successfully.');
+        return to_route('posts.index')->with('success', 'Post updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Feature $feature)
+    public function destroy(Post $post)
     {
-        $feature->delete();
+        $post->delete();
 
-        return to_route('features.index')->with('success', 'Feature deleted successfully.');
+        return to_route('posts.index')->with('success', 'Post deleted successfully.');
     }
 }

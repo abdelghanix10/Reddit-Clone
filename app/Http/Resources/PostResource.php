@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\CommentResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class HomeFeatureResource extends JsonResource
+class PostResource extends JsonResource
 {
     public static $wrap = false;
     /**
@@ -25,6 +25,7 @@ class HomeFeatureResource extends JsonResource
             'comments_count' => $this->comments_count ?? 0,
             'user_has_upvoted' => $this->user_has_upvoted ?? false,
             'user_has_downvoted' => $this->user_has_downvoted ?? false,
+            'comments' => CommentResource::collection($this->whenLoaded('comments')),
             'created_at' => $this->created_at->diffForHumans(),
             'updated_at' => $this->updated_at->diffForHumans(),
         ];

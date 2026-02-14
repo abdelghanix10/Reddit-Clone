@@ -13,7 +13,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import features from '@/routes/features';
+import posts from '@/routes/posts';
 import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
 
@@ -24,8 +24,8 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Features',
-        href: features.index().url,
+        title: 'Posts',
+        href: posts.index().url,
         icon: Star,
     },
 ];

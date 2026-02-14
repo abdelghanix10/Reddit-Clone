@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Feature;
+use App\Models\Post;
 use App\Models\User;
 use App\Enum\RolesEnum;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -22,8 +22,8 @@ class DatabaseSeeder extends Seeder
         $commenterRole = Role::create(['name' => RolesEnum::Commenter->value]);
         $adminRole = Role::create(['name' => RolesEnum::Admin->value]);
 
-        $mangeFeaturesPermission = Permission::create(['name' => PermissionsEnum::ManageFeatures->value]);
-        $manageUsersPermission = Permission::create(['name' => PermissionsEnum::ManageUsers->value]);
+        // $mangePostsPermission = Permission::create(['name' => PermissionsEnum::ManagePosts->value]);
+        // $manageUsersPermission = Permission::create(['name' => PermissionsEnum::ManageUsers->value]);
         $manageCommentsPermission = Permission::create(['name' => PermissionsEnum::ManageComments->value]);
         $upvoteDownvotePermission = Permission::create(['name' => PermissionsEnum::UpvoteDownvote->value]);
 
@@ -46,6 +46,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
         ])->assignRole(RolesEnum::Admin);
 
-        Feature::factory(100)->create();
+        Post::factory(100)->create();
     }
 }

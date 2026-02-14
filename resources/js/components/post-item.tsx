@@ -1,9 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import {
-    MessageSquare,
-    Edit,
-    Trash2,
-} from 'lucide-react';
+import { MessageSquare, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Card,
@@ -12,22 +8,22 @@ import {
     CardHeader,
 } from '@/components/ui/card';
 import UpvoteDownvoteItem from '@/components/upvote-downvote-item';
-import features from '@/routes/features';
+import posts from '@/routes/posts';
 import type { SharedData } from '@/types';
-import type { Feature } from '@/types/feature';
+import type { Post } from '@/types/post';
 
-interface FeatureItemProps {
-    feature: Feature;
+interface PostItemProps {
+    post: Post;
 }
 
-export default function FeatureItem({ feature }: FeatureItemProps) {
+export default function PostItem({ post }: PostItemProps) {
     const { auth } = usePage<SharedData>().props;
-    const isOwner = auth.user?.id === feature.user?.id;
+    const isOwner = auth.user?.id === post.user?.id;
 
     return (
         <Card className="flex flex-row overflow-hidden bg-card transition-colors hover:border-gray-400 dark:hover:border-gray-600">
             {/* Voting Section */}
-            <UpvoteDownvoteItem feature={feature} />
+            <UpvoteDownvoteItem post={post} />
 
             {/* Content Section */}
             <div className="flex flex-1 flex-col">
@@ -35,17 +31,17 @@ export default function FeatureItem({ feature }: FeatureItemProps) {
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                             <span className="cursor-pointer font-bold text-foreground hover:underline">
-                                r/features
+                                r/posts
                             </span>
                             <span>•</span>
                             <span>
-                                Posted by u/{feature.user?.name || 'anonymous'}
+                                Posted by u/{post.user?.name || 'anonymous'}
                             </span>
                             <span>•</span>
                             <span>
-                                {feature.updated_at
-                                    ? `Edited ${feature.updated_at}`
-                                    : feature.created_at}
+                                {post.updated_at
+                                    ? `Edited ${post.updated_at}`
+                                    : post.created_at}
                             </span>
                         </div>
                         {isOwner && (
@@ -56,7 +52,7 @@ export default function FeatureItem({ feature }: FeatureItemProps) {
                                     size="icon"
                                     className="h-7 w-7 text-muted-foreground hover:text-foreground"
                                 >
-                                    <Link href={features.edit(feature.id).url}>
+                                    <Link href={posts.edit(post.id).url}>
                                         <Edit className="h-3.5 w-3.5" />
                                     </Link>
                                 </Button>
@@ -67,7 +63,7 @@ export default function FeatureItem({ feature }: FeatureItemProps) {
                                     className="h-7 w-7 text-muted-foreground hover:text-destructive"
                                 >
                                     <Link
-                                        href={features.destroy(feature.id).url}
+                                        href={posts.destroy(post.id).url}
                                         method="delete"
                                         as="button"
                                         className="h-7 w-7 text-muted-foreground hover:text-destructive"
@@ -79,13 +75,11 @@ export default function FeatureItem({ feature }: FeatureItemProps) {
                             </div>
                         )}
                     </div>
-                    <h3 className="mt-2 text-lg font-semibold">
-                        {feature.name}
-                    </h3>
+                    <h3 className="mt-2 text-lg font-semibold">{post.name}</h3>
                 </CardHeader>
                 <CardContent className="px-4 py-2">
                     <p className="line-clamp-3 text-sm text-muted-foreground">
-                        {feature.description}
+                        {post.description}
                     </p>
                 </CardContent>
                 <CardFooter className="flex gap-2 p-2 px-4 pt-0">
@@ -95,10 +89,10 @@ export default function FeatureItem({ feature }: FeatureItemProps) {
                         size="sm"
                         className="h-auto gap-2 p-2 text-muted-foreground hover:bg-muted/50"
                     >
-                        <Link href={features.show(feature.id).url}>
+                        <Link href={posts.show(post.id).url}>
                             <MessageSquare className="h-4 w-4" />
                             <span className="text-xs font-bold">
-                                {feature.comments_count} Comments
+                                {post.comments_count} Comments
                             </span>
                         </Link>
                     </Button>

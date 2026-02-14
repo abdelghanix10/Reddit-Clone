@@ -5,7 +5,7 @@ use Laravel\Fortify\Features;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UpvoteController;
-use \App\Http\Controllers\FeatureController;
+use \App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     return Inertia::render('welcome', [
@@ -18,12 +18,12 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('features', FeatureController::class);
+    Route::resource('posts', PostController::class);
 
-    Route::post('features/{feature}/upvote', [UpvoteController::class, 'store'])->name('features.upvote');
-    Route::delete('features/{feature}/upvote', [UpvoteController::class, 'destroy'])->name('features.upvote.destroy');
-    Route::post('features/{feature}/comments', [CommentController::class, 'store'])->name('features.comments.store');
-    Route::delete('features/{feature}/comments/{comment}', [CommentController::class, 'destroy'])->name('features.comments.destroy');
+    Route::post('posts/{post}/upvote', [UpvoteController::class, 'store'])->name('posts.upvote');
+    Route::delete('posts/{post}/upvote', [UpvoteController::class, 'destroy'])->name('posts.upvote.destroy');
+    Route::post('posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
+    Route::delete('posts/{post}/comments/{comment}', [CommentController::class, 'destroy'])->name('posts.comments.destroy');
 });
 
 require __DIR__.'/settings.php';

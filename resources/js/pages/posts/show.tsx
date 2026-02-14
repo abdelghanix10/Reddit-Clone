@@ -13,20 +13,19 @@ import { Textarea } from '@/components/ui/textarea';
 
 import UpvoteDownvoteItem from '@/components/upvote-downvote-item';
 import AppLayout from '@/layouts/app-layout';
-import features from '@/routes/features';
+import posts from '@/routes/posts';
 import type { BreadcrumbItem, SharedData } from '@/types';
-import type { Feature } from '@/types/feature';
+import type { Post } from '@/types/post';
 
-type FeatureShowProps = {
-    feature: Feature;
+type PostShowProps = {
+    post: Post;
 };
 
-export default function Show({ feature }: FeatureShowProps) {
+export default function Show({ post }: PostShowProps) {
     const { auth } = usePage<SharedData>().props;
-    const isOwner = auth.user?.id === feature.user?.id;
-    const comments = feature.comments ?? [];
-    const commentCount =
-        feature.comments_count ?? feature.comments?.length ?? 0;
+    const isOwner = auth.user?.id === post.user?.id;
+    const comments = post.comments ?? [];
+    const commentCount = post.comments_count ?? post.comments?.length ?? 0;
 
     const { data, setData, post, processing, errors, reset } = useForm({
         content: '',
@@ -34,7 +33,7 @@ export default function Show({ feature }: FeatureShowProps) {
 
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
         event.preventDefault();
-        post(features.comments.store(feature.id).url, {
+        post(posts.comments.store(post.id).url, {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => reset('content'),
@@ -43,40 +42,40 @@ export default function Show({ feature }: FeatureShowProps) {
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
-            title: 'Features',
-            href: features.index().url,
+            title: 'Posts',
+            href: posts.index().url,
         },
         {
-            title: feature.name,
-            href: features.show(feature.id).url,
+            title: post.title,
+            href: posts.show(post.id).url,
         },
     ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={feature.name} />
+            <Head title={post.name} />
 
             <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 p-4">
                 <Card className="flex flex-row overflow-hidden bg-card">
-                    <UpvoteDownvoteItem feature={feature} />
+                    <UpvoteDownvoteItem post={post} />
 
                     <div className="flex flex-1 flex-col">
                         <CardHeader className="space-y-0 p-4 pb-2">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                     <span className="cursor-pointer font-bold text-foreground hover:underline">
-                                        r/features
+                                        r/posts
                                     </span>
                                     <span>|</span>
                                     <span>
                                         Posted by u/
-                                        {feature.user?.name || 'anonymous'}
+                                        {post.user?.name || 'anonymous'}
                                     </span>
                                     <span>|</span>
                                     <span>
-                                        {feature.updated_at
-                                            ? `Edited ${feature.updated_at}`
-                                            : feature.created_at}
+                                        {post.updated_at
+                                            ? `Edited ${post.updated_at}`
+                                            : post.created_at}
                                     </span>
                                 </div>
                                 {isOwner && (
@@ -88,10 +87,7 @@ export default function Show({ feature }: FeatureShowProps) {
                                             className="h-7 w-7 text-muted-foreground hover:text-foreground"
                                         >
                                             <Link
-                                                href={
-                                                    features.edit(feature.id)
-                                                        .url
-                                                }
+                                                href={posts.edit(post.id).url}
                                             >
                                                 <Edit className="h-3.5 w-3.5" />
                                             </Link>
@@ -104,8 +100,7 @@ export default function Show({ feature }: FeatureShowProps) {
                                         >
                                             <Link
                                                 href={
-                                                    features.destroy(feature.id)
-                                                        .url
+                                                    posts.destroy(post.id).url
                                                 }
                                                 method="delete"
                                                 as="button"
@@ -119,12 +114,12 @@ export default function Show({ feature }: FeatureShowProps) {
                                 )}
                             </div>
                             <h1 className="mt-2 text-xl font-semibold">
-                                {feature.name}
+                                {post.name}
                             </h1>
                         </CardHeader>
                         <CardContent className="px-4 py-2">
                             <p className="text-sm whitespace-pre-line text-muted-foreground">
-                                {feature.description}
+                                {post.description}
                             </p>
                         </CardContent>
                         <CardFooter className="p-2 px-4 pt-0 text-xs text-muted-foreground">
@@ -209,10 +204,9 @@ export default function Show({ feature }: FeatureShowProps) {
                                                 >
                                                     <Link
                                                         href={
-                                                            features.comments.destroy(
+                                                            posts.comments.destroy(
                                                                 {
-                                                                    feature:
-                                                                        feature.id,
+                                                                    post: post.id,
                                                                     comment:
                                                                         comment.id,
                                                                 },

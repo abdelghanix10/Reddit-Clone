@@ -1,42 +1,42 @@
 import { Head, InfiniteScroll, Link } from '@inertiajs/react';
 
 import { Plus } from 'lucide-react';
-import FeatureItem from '@/components/feature-item';
+import PostItem from '@/components/post-item';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
-import features from '@/routes/features';
+import posts from '@/routes/posts';
 import type { BreadcrumbItem, PaginatedResponse } from '@/types';
-import type { Feature } from '@/types/feature';
+import type { Post } from '@/types/post';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Features',
-        href: features.index().url,
+        title: 'Posts',
+        href: posts.index().url,
     },
 ];
 
 export default function Index({
-    features: featuresData,
+    posts: postsData,
 }: {
-    features: PaginatedResponse<Feature>;
+    posts: PaginatedResponse<Post>;
 }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Features" />
+            <Head title="Posts" />
 
             <div className="mx-auto flex w-full max-w-4xl flex-col gap-4 p-4">
                 <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-2xl font-bold">Features</h2>
+                    <h2 className="text-2xl font-bold">Posts</h2>
                     <Button asChild className="rounded-full">
-                        <Link href={features.create().url}>
+                        <Link href={posts.create().url}>
                             <Plus className="mr-2 h-4 w-4" />
-                            Create Feature
+                            Create Post
                         </Link>
                     </Button>
                 </div>
 
                 <InfiniteScroll
-                    data="features"
+                    data="posts"
                     manualAfter={3}
                     buffer={300}
                     previous={({ loading, fetch, hasMore }) =>
@@ -64,14 +64,14 @@ export default function Index({
                         )
                     }
                 >
-                    {featuresData.data.map((feature) => (
-                        <FeatureItem key={feature.id} feature={feature} />
+                    {postsData.data.map((post) => (
+                        <PostItem key={post.id} post={post} />
                     ))}
                 </InfiniteScroll>
 
-                {featuresData.data.length === 0 && (
+                {postsData.data.length === 0 && (
                     <div className="rounded-lg border border-dashed bg-card py-12 text-center text-muted-foreground">
-                        No features found. Be the first to create one!
+                        No posts found. Be the first to create one!
                     </div>
                 )}
             </div>

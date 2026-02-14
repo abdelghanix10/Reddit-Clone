@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
-use App\Models\Feature;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,13 +12,13 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Feature $feature)
+    public function store(Request $request, Post $post)
     {
         $data = $request->validate([
             'content' => 'required|string|max:2000',
         ]);
 
-        $feature->comments()->create([
+        $post->comments()->create([
             'content' => $data['content'],
             'user_id' => Auth::id(),
         ]);
@@ -29,9 +29,9 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Feature $feature, Comment $comment)
+    public function destroy(Post $post, Comment $comment)
     {
-        if ($comment->feature_id !== $feature->id) {
+        if ($comment->post_id !== $post->id) {
             abort(404);
         }
 
